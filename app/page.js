@@ -1,699 +1,820 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
-import Link from 'next/link';
-import ScrollReveal from './components/ScrollReveal';
-import ParallaxText, { ParallaxMarquee } from './components/ParallaxText';
-import AnimatedCounter from './components/AnimatedCounter';
-import MagneticButton from './components/MagneticButton';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
-const services = [
-  {
-    num: '01',
-    title: 'Brand Strategy',
-    desc: 'We craft compelling brand narratives that resonate with your audience and drive meaningful engagement across all touchpoints.',
-    icon: '◆',
-  },
-  {
-    num: '02',
-    title: 'Creator Marketing',
-    desc: 'Connect with top-tier creators who authentically represent your brand and amplify your message to millions.',
-    icon: '▲',
-  },
-  {
-    num: '03',
-    title: 'Content Production',
-    desc: 'From concept to delivery, we produce stunning visual content that captivates audiences and elevates your brand.',
-    icon: '●',
-  },
-  {
-    num: '04',
-    title: 'Digital Campaigns',
-    desc: 'Data-driven campaigns that maximize ROI and deliver measurable results across every digital platform.',
-    icon: '■',
-  },
-  {
-    num: '05',
-    title: 'Social Management',
-    desc: 'Full-service social media management that grows communities and creates meaningful conversations.',
-    icon: '◈',
-  },
-  {
-    num: '06',
-    title: 'Performance Marketing',
-    desc: 'Strategic ad placement and optimization to reach the right audience at the right moment with precision.',
-    icon: '✦',
-  },
-];
+const LAUNCH_DATE = new Date('2026-04-03T00:00:00');
 
-const capabilities = [
-  'BRANDING', 'INTERIOR SHOOTS', 'FASHION CAMPAIGNS', 'REAL ESTATE',
-  'CONTENT CREATION', 'SOCIAL MEDIA', 'PERFORMANCE MARKETING',
-  'CREATOR PARTNERSHIPS', 'DIGITAL STRATEGY', 'VIDEO PRODUCTION',
-  'INFLUENCER MARKETING', 'BRAND STORYTELLING',
-];
+function useCountdown(target) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-const stats = [
-  { number: 25, suffix: '+', label: 'Projects Launched' },
-  { number: 15, suffix: '+', label: 'Happy Clients' },
-  { number: 100, suffix: '%', label: 'Passion Driven' },
-  { number: 5, suffix: 'M+', label: 'Reach Generated' },
-];
+  useEffect(() => {
+    function calc() {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+      });
+    }
+    calc();
+    const id = setInterval(calc, 1000);
+    return () => clearInterval(id);
+  }, [target]);
 
-const testimonials = [
-  {
-    quote: "We took a chance on Creatorstick for our brand launch and it paid off big time. Their energy and creativity is unmatched — they feel like a founding team member.",
-    author: "Rahul Mehra",
-    role: "Founder, TechVenture Inc.",
-  },
-  {
-    quote: "For a new agency, their output is insane. Fresh ideas, fast execution, and they genuinely care about results. Can't recommend them enough.",
-    author: "Ananya Desai",
-    role: "Brand Lead, UrbanStyle",
-  },
-  {
-    quote: "Creatorstick brought the hunger and creativity that bigger agencies have lost. They helped us go from zero to a real brand presence in weeks.",
-    author: "Priya Sharma",
-    role: "Founder, BloomHealth",
-  },
-];
+  return timeLeft;
+}
 
-export default function Home() {
+function CountdownUnit({ value, label }) {
+  const str = String(value).padStart(2, '0');
+  return (
+    <div className="cs-countdown-unit">
+      <div className="cs-countdown-number">
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={str}
+            initial={{ y: -30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 30, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="cs-countdown-digit"
+          >
+            {str}
+          </motion.span>
+        </AnimatePresence>
+      </div>
+      <span className="cs-countdown-label">{label}</span>
+    </div>
+  );
+}
+
+export default function ComingSoon() {
+  const { days, hours, minutes, seconds } = useCountdown(LAUNCH_DATE);
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
   const heroRef = useRef(null);
-  const { scrollYProgress: heroScrollProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
-  
-  const heroY = useTransform(heroScrollProgress, [0, 1], [0, 200]);
-  const heroOpacity = useTransform(heroScrollProgress, [0, 0.8], [1, 0]);
-  const heroScale = useTransform(heroScrollProgress, [0, 1], [1, 0.9]);
 
-  const scrollFrameRef = useRef(null);
-  const { scrollYProgress: frameProgress } = useScroll({
-    target: scrollFrameRef,
-    offset: ['start end', 'end start'],
-  });
-  
-  const frameScale = useTransform(frameProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
-  const frameRotate = useTransform(frameProgress, [0, 1], [-5, 5]);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    setError('');
+    setSubmitted(true);
+  }
+
+  const marqueeItems = [
+    'BRAND STRATEGY', 'CREATOR MARKETING', 'CONTENT PRODUCTION',
+    'DIGITAL CAMPAIGNS', 'SOCIAL MEDIA', 'PERFORMANCE MARKETING',
+    'BRAND STORYTELLING', 'INFLUENCER MARKETING',
+  ];
 
   return (
-    <div className="relative">
-      {/* ============= HERO SECTION ============= */}
-      <section ref={heroRef} className="relative h-screen flex flex-col items-center justify-center overflow-hidden pt-20 pb-16">
-        {/* Background Grid */}
-        <div className="absolute inset-0 grid-pattern" />
-        
-        {/* Animated Gradient Orbs */}
-        <motion.div
-          animate={{
-            x: [0, 100, -50, 0],
-            y: [0, -80, 50, 0],
-            scale: [1, 1.2, 0.9, 1],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-          className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-orange/10 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            x: [0, -80, 60, 0],
-            y: [0, 60, -40, 0],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-          className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-orange/5 rounded-full blur-[100px]"
-        />
+    <>
+      <style>{`
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        <motion.div
-          style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
-          className="relative z-10 max-w-7xl mx-auto px-6 text-center flex flex-col items-center justify-center flex-1"
-        >
-          {/* Badge */}
+        .cs-root {
+          min-height: 100vh;
+          background: #0a0a0a;
+          color: #ffffff;
+          font-family: 'Montserrat', sans-serif;
+          overflow-x: hidden;
+          position: relative;
+        }
+
+        /* ── NOISE OVERLAY ── */
+        .cs-root::before {
+          content: '';
+          position: fixed;
+          inset: 0;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        /* ── GRID PATTERN ── */
+        .cs-grid {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+          background-size: 60px 60px;
+          pointer-events: none;
+        }
+
+        /* ── HERO ── */
+        .cs-hero {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 6rem 1.5rem 4rem;
+          overflow: hidden;
+        }
+
+        /* ── ORB BG ── */
+        .cs-orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(120px);
+          pointer-events: none;
+        }
+        .cs-orb-1 {
+          width: 600px; height: 600px;
+          background: rgba(255,107,0,0.12);
+          top: -100px; right: -150px;
+        }
+        .cs-orb-2 {
+          width: 500px; height: 500px;
+          background: rgba(255,107,0,0.06);
+          bottom: -100px; left: -100px;
+        }
+        .cs-orb-3 {
+          width: 300px; height: 300px;
+          background: rgba(255,140,0,0.08);
+          top: 50%; left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        /* ── HERO CONTENT ── */
+        .cs-content {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+          max-width: 900px;
+          width: 100%;
+        }
+
+        /* ── DEV BADGE ── */
+        .cs-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,107,0,0.25);
+          border-radius: 100px;
+          padding: 8px 20px;
+          margin-bottom: 2.5rem;
+          backdrop-filter: blur(12px);
+        }
+        .cs-badge-dot {
+          width: 8px; height: 8px;
+          background: #FF6B00;
+          border-radius: 50%;
+          animation: badge-pulse 2s ease-in-out infinite;
+        }
+        @keyframes badge-pulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,0,0.4); }
+          50% { box-shadow: 0 0 0 6px rgba(255,107,0,0); }
+        }
+        .cs-badge-text {
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #FF6B00;
+        }
+
+        /* ── HEADLINE ── */
+        .cs-headline {
+          font-size: clamp(2.8rem, 9.5vw, 7rem);
+          font-weight: 900;
+          line-height: 1.08;
+          letter-spacing: -0.03em;
+          font-family: 'Montserrat', sans-serif;
+          margin-bottom: 1.5rem;
+          overflow: visible;
+        }
+        .cs-headline-white { color: #ffffff; display: block; }
+        .cs-headline-orange {
+          display: block;
+          background: linear-gradient(135deg, #FF6B00 0%, #ff8c38 50%, #ffb380 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .cs-headline-dim {
+          color: rgba(255,255,255,0.15);
+          display: block;
+        }
+
+        /* ── SUBTEXT ── */
+        .cs-sub {
+          font-size: clamp(0.95rem, 2vw, 1.2rem);
+          color: #888888;
+          max-width: 560px;
+          margin: 0 auto 3.5rem;
+          line-height: 1.75;
+          font-weight: 400;
+        }
+
+        /* ── PROGRESS BAR ── */
+        .cs-progress-wrap {
+          margin-bottom: 3.5rem;
+        }
+        .cs-progress-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.75rem;
+        }
+        .cs-progress-label {
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.18em;
+          color: #555;
+          font-weight: 600;
+        }
+        .cs-progress-pct {
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: #FF6B00;
+        }
+        .cs-progress-track {
+          height: 4px;
+          background: rgba(255,255,255,0.06);
+          border-radius: 100px;
+          overflow: hidden;
+          width: 100%;
+          max-width: 480px;
+          margin: 0 auto;
+        }
+        .cs-progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #FF6B00, #ffb380);
+          border-radius: 100px;
+          box-shadow: 0 0 12px rgba(255,107,0,0.5);
+        }
+
+        /* ── COUNTDOWN ── */
+        .cs-countdown {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: clamp(1rem, 3vw, 2.5rem);
+          margin-bottom: 3.5rem;
+          flex-wrap: wrap;
+        }
+        .cs-countdown-unit {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+        .cs-countdown-number {
+          position: relative;
+          width: clamp(72px, 12vw, 110px);
+          height: clamp(72px, 12vw, 110px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 16px;
+          overflow: hidden;
+          backdrop-filter: blur(8px);
+        }
+        .cs-countdown-number::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 16px;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+          pointer-events: none;
+        }
+        .cs-countdown-digit {
+          font-size: clamp(1.8rem, 5vw, 3rem);
+          font-weight: 800;
+          color: #ffffff;
+          font-variant-numeric: tabular-nums;
+          display: block;
+          font-family: 'Montserrat', sans-serif;
+        }
+        .cs-countdown-label {
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: #555;
+          font-weight: 600;
+        }
+        .cs-countdown-sep {
+          font-size: clamp(1.5rem, 4vw, 2.5rem);
+          font-weight: 300;
+          color: rgba(255,107,0,0.4);
+          margin-top: -20px;
+        }
+
+        /* ── EMAIL FORM ── */
+        .cs-form-wrap {
+          max-width: 500px;
+          margin: 0 auto 2.5rem;
+        }
+        .cs-form-label {
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.18em;
+          color: #555;
+          font-weight: 600;
+          display: block;
+          margin-bottom: 0.75rem;
+        }
+        .cs-form {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .cs-input {
+          flex: 1;
+          min-width: 220px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 100px;
+          padding: 14px 24px;
+          font-size: 0.9rem;
+          color: #ffffff;
+          font-family: 'Montserrat', sans-serif;
+          transition: border-color 0.3s, box-shadow 0.3s;
+          outline: none;
+        }
+        .cs-input::placeholder { color: #444; }
+        .cs-input:focus {
+          border-color: #FF6B00;
+          box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
+        }
+        .cs-btn {
+          background: #FF6B00;
+          color: #ffffff;
+          border: none;
+          border-radius: 100px;
+          padding: 14px 28px;
+          font-size: 0.9rem;
+          font-weight: 700;
+          font-family: 'Montserrat', sans-serif;
+          cursor: pointer;
+          transition: background 0.25s, transform 0.2s, box-shadow 0.3s;
+          white-space: nowrap;
+        }
+        .cs-btn:hover {
+          background: #ff8533;
+          transform: translateY(-1px);
+          box-shadow: 0 0 30px rgba(255,107,0,0.4);
+        }
+        .cs-btn:active { transform: translateY(0); }
+        .cs-form-error {
+          font-size: 0.78rem;
+          color: #ff4444;
+          margin-top: 0.5rem;
+        }
+        .cs-form-success {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          font-size: 0.9rem;
+          color: #FF6B00;
+          font-weight: 600;
+          padding: 14px 0;
+        }
+        .cs-form-success-icon {
+          width: 24px; height: 24px;
+          background: rgba(255,107,0,0.15);
+          border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 0.75rem;
+        }
+
+        /* ── SOCIAL ── */
+        .cs-social {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.875rem;
+        }
+        .cs-social-link {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px; height: 44px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          color: #666;
+          text-decoration: none;
+          transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+          flex-shrink: 0;
+        }
+        .cs-social-link svg {
+          width: 18px; height: 18px;
+          fill: currentColor;
+          display: block;
+          flex-shrink: 0;
+        }
+        .cs-social-link:hover {
+          background: rgba(255,107,0,0.12);
+          border-color: rgba(255,107,0,0.35);
+          color: #FF6B00;
+          transform: translateY(-3px);
+          box-shadow: 0 6px 20px rgba(255,107,0,0.2);
+        }
+
+        /* ── MARQUEE ── */
+        .cs-marquee-section {
+          position: relative;
+          z-index: 2;
+          border-top: 1px solid rgba(255,255,255,0.05);
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          padding: 1.25rem 0;
+          overflow: hidden;
+          background: rgba(255,255,255,0.01);
+        }
+        .cs-marquee-track {
+          display: flex;
+          animation: marquee-scroll 28s linear infinite;
+          width: max-content;
+        }
+        @keyframes marquee-scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .cs-marquee-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 1.5rem;
+          padding: 0 2rem;
+          white-space: nowrap;
+        }
+        .cs-marquee-text {
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.12);
+          transition: color 0.3s;
+        }
+        .cs-marquee-dot {
+          width: 4px; height: 4px;
+          background: rgba(255,107,0,0.4);
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+
+        /* ── FOOTER LINE ── */
+        .cs-footer {
+          position: relative;
+          z-index: 2;
+          padding: 2rem 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+        .cs-footer-brand {
+          font-size: 0.8rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          color: rgba(255,255,255,0.25);
+        }
+        .cs-footer-brand span { color: #FF6B00; }
+        .cs-footer-copy {
+          font-size: 0.72rem;
+          color: rgba(255,255,255,0.12);
+          letter-spacing: 0.05em;
+        }
+
+        /* ── SCROLL INDICATOR ── */
+        .cs-scroll-hint {
+          position: absolute;
+          bottom: 2.5rem;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+        }
+        .cs-scroll-mouse {
+          width: 24px; height: 38px;
+          border: 2px solid rgba(255,255,255,0.15);
+          border-radius: 12px;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          padding: 5px;
+        }
+        .cs-scroll-dot {
+          width: 4px; height: 4px;
+          background: #FF6B00;
+          border-radius: 50%;
+          animation: scroll-bounce 2s ease-in-out infinite;
+        }
+        @keyframes scroll-bounce {
+          0%, 100% { transform: translateY(0); opacity: 1; }
+          50% { transform: translateY(12px); opacity: 0.3; }
+        }
+        .cs-scroll-text {
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: rgba(255,255,255,0.2);
+          font-weight: 600;
+        }
+
+        /* ── FEATURED TAGS ── */
+        .cs-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          justify-content: center;
+          margin-bottom: 3rem;
+        }
+        .cs-tag {
+          font-size: 0.65rem;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.25);
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 100px;
+          padding: 5px 14px;
+        }
+      `}</style>
+
+      <div className="cs-root">
+        {/* ── HERO ── */}
+        <section ref={heroRef} className="cs-hero">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="inline-flex items-center gap-2 glass-light rounded-full px-5 py-2 mb-6"
-          >
-            <span className="w-2 h-2 bg-orange rounded-full animate-pulse" />
-            <span className="text-sm font-medium tracking-wide" style={{ color: 'var(--muted)' }}>Fresh. Bold. Creative.</span>
-          </motion.div>
-
-          {/* Hero Heading */}
-          <div className="overflow-hidden py-1">
-            <motion.h1
-              initial={{ y: 100 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-montserrat leading-[0.95] tracking-tight"
-              style={{ color: 'var(--heading)' }}
-            >
-              We Create
-            </motion.h1>
-          </div>
-          <div className="overflow-hidden py-1">
-            <motion.h1
-              initial={{ y: 100 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-montserrat leading-[0.95] tracking-tight gradient-text"
-            >
-              Digital Impact
-            </motion.h1>
-          </div>
-          <div className="overflow-hidden py-1 mb-4">
-            <motion.h1
-              initial={{ y: 100 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold font-montserrat leading-[0.95] tracking-tight"
-              style={{ color: 'var(--text-subtle)' }}
-            >
-              That Lasts
-            </motion.h1>
-          </div>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed"
-            style={{ color: 'var(--muted)' }}
-          >
-            A new-age media agency on a mission to transform brands through bold storytelling, 
-            creative campaigns, and next-gen digital strategy.
-          </motion.p>
-
-          {/* CTA Buttons */}
+            style={{ y: bgY }}
+            className="cs-orb cs-orb-1"
+            animate={{ x: [0, 60, -30, 0], y: [0, -40, 30, 0], scale: [1, 1.1, 0.95, 1] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          />
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <Link
-              href="/book"
-              className="bg-orange hover:bg-[#ff8533] text-white px-10 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,107,0,0.4)] hover:scale-105"
-              style={{ color: '#ffffff' }}
-            >
-              Start Your Project
-            </Link>
-            <Link
-              href="/for-brands"
-              className="px-10 py-4 rounded-full text-lg font-medium transition-all duration-300"
-              style={{ color: 'var(--heading)', border: '1px solid var(--border-hover)' }}
-            >
-              Explore Services
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-          className="relative z-10 mt-auto"
-        >
+            className="cs-orb cs-orb-2"
+            animate={{ x: [0, -40, 20, 0], y: [0, 30, -20, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+          />
           <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-6 h-10 rounded-full flex items-start justify-center p-1"
-            style={{ border: '2px solid var(--border-hover)' }}
-          >
+            className="cs-orb cs-orb-3"
+            animate={{ scale: [1, 1.3, 1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <div className="cs-grid" />
+
+          <div className="cs-content">
+            {/* Badge */}
             <motion.div
-              animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-1.5 h-1.5 bg-orange rounded-full"
-            />
-          </motion.div>
-        </motion.div>
-      </section>
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="cs-badge"
+              id="dev-badge"
+            >
+              <span className="cs-badge-dot" />
+              <span className="cs-badge-text">Currently Under Development</span>
+              <span className="cs-badge-dot" />
+            </motion.div>
 
-      {/* ============= MARQUEE ============= */}
-      <section className="py-8" style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-        <ParallaxMarquee text="CREATORSTICK MEDIA" />
-      </section>
-
-      {/* ============= CAPABILITIES MARQUEE ============= */}
-      <section className="py-16" style={{ borderBottom: '1px solid var(--border)' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <p className="text-sm uppercase tracking-[0.2em] text-center mb-10" style={{ color: 'var(--muted)' }}>
-              What We Bring to the Table
-            </p>
-          </ScrollReveal>
-          <div className="overflow-hidden">
-            <div className="animate-marquee flex">
-              {[...capabilities, ...capabilities].map((cap, i) => (
-                <span
-                  key={i}
-                  className="mx-8 flex items-center gap-4 whitespace-nowrap"
-                >
-                  <span className="text-xl md:text-2xl font-bold font-montserrat tracking-widest cursor-default hover:text-orange transition-colors duration-500" style={{ color: 'var(--text-subtle)' }}>
-                    {cap}
-                  </span>
-                  <span className="text-orange text-xs">✦</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============= ABOUT SECTION ============= */}
-      <section className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <ScrollReveal direction="left">
-                <p className="text-orange text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-                  Who We Are
-                </p>
-                <h2 className="text-4xl md:text-6xl font-bold font-montserrat leading-tight mb-6" style={{ color: 'var(--heading)' }}>
-                  The New Era of <br />
-                  <span className="gradient-text">Media & Creativity</span>
-                </h2>
-                <p className="text-lg leading-relaxed mb-8" style={{ color: 'var(--muted)' }}>
-                  Creatorstick Media is a fresh, hungry, and ambitious team of creatives, 
-                  strategists, and storytellers. We launched with a single mission — to help 
-                  brands stand out in a noisy digital world through authentic content, smart 
-                  strategy, and relentless innovation.
-                </p>
-                <div className="flex gap-4">
-                  <Link
-                    href="/for-brands"
-                    className="bg-orange text-white px-8 py-3 rounded-full font-semibold hover:bg-[#ff8533] transition-all duration-300"
-                    style={{ color: '#ffffff' }}
-                  >
-                    Our Work
-                  </Link>
-                  <Link
-                    href="/careers"
-                    className="px-8 py-3 rounded-full font-medium transition-all duration-300 hover:text-orange"
-                    style={{ color: 'var(--heading)', border: '1px solid var(--border-hover)' }}
-                  >
-                    Join Us
-                  </Link>
-                </div>
-              </ScrollReveal>
-            </div>
-
-            <ScrollReveal direction="right">
-              <div ref={scrollFrameRef} className="relative">
-                <motion.div
-                  className="aspect-square rounded-3xl p-8 flex items-center justify-center"
-                  style={{ scale: frameScale, rotateZ: frameRotate, background: 'linear-gradient(135deg, var(--card-glow), transparent)', border: '1px solid var(--border)' }}
-                >
-                  <div className="text-center">
-                    <div className="text-7xl md:text-8xl font-bold gradient-text font-montserrat mb-2">∞</div>
-                    <div style={{ color: 'var(--heading)' }} className="text-xl font-bold font-montserrat mb-1">Limitless Ideas</div>
-                    <div style={{ color: 'var(--muted)' }} className="text-sm">One Bold Vision</div>
-                  </div>
-                </motion.div>
-                {/* Floating elements */}
-                <motion.div
-                  animate={{ y: [0, -15, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute -top-4 -right-4 w-20 h-20 bg-orange/10 rounded-2xl border border-orange/20 flex items-center justify-center"
-                >
-                  <span className="text-orange text-2xl">◆</span>
-                </motion.div>
-                <motion.div
-                  animate={{ y: [0, 15, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute -bottom-4 -left-4 w-16 h-16 rounded-xl flex items-center justify-center"
-                  style={{ background: 'var(--glass-light-bg)', border: '1px solid var(--glass-light-border)' }}
-                >
-                  <span className="text-xl" style={{ color: 'var(--muted)' }}>✦</span>
-                </motion.div>
-              </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ============= STATS SECTION ============= */}
-      <section className="py-20" style={{ borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <div className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold font-montserrat mb-2" style={{ color: 'var(--heading)' }}>
-                    <AnimatedCounter target={stat.number} suffix={stat.suffix} />
-                  </div>
-                  <p className="text-sm uppercase tracking-wider" style={{ color: 'var(--muted)' }}>{stat.label}</p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============= SERVICES SECTION ============= */}
-      <section className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <p className="text-orange text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-                What We Do
-              </p>
-              <h2 className="text-4xl md:text-6xl font-bold font-montserrat" style={{ color: 'var(--heading)' }}>
-                Our <span className="gradient-text">Services</span>
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <motion.div
-                  whileHover={{ y: -8 }}
-                  transition={{ duration: 0.3 }}
-                  className="group p-8 rounded-2xl cursor-pointer h-full transition-all duration-500 t-card"
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="text-3xl text-orange/50 group-hover:text-orange transition-colors">
-                      {service.icon}
-                    </span>
-                    <span className="text-sm font-mono" style={{ color: 'var(--text-subtle)' }}>{service.num}</span>
-                  </div>
-                  <h3 className="text-xl font-bold font-montserrat mb-3 group-hover:text-orange transition-colors" style={{ color: 'var(--heading)' }}>
-                    {service.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-                    {service.desc}
-                  </p>
-                  <div className="mt-6 flex items-center gap-2 text-orange text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Learn More
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  </div>
-                </motion.div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============= OUR WORK / PORTFOLIO ============= */}
-      <section className="py-32 relative" style={{ borderTop: '1px solid var(--border)' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-6">
-              <p className="text-orange text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-                Portfolio
-              </p>
-              <h2 className="text-4xl md:text-6xl font-bold font-montserrat" style={{ color: 'var(--heading)' }}>
-                Our <span className="gradient-text">Work</span>
-              </h2>
-              <p className="text-base mt-4 max-w-2xl mx-auto" style={{ color: 'var(--muted)' }}>
-                From luxury interiors to high-end fashion campaigns and premium real estate — here&apos;s a glimpse of what we create.
-              </p>
-            </div>
-          </ScrollReveal>
-
-          {/* Category Pills */}
-          <ScrollReveal>
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-14">
-              {['All', 'Interior Shoots', 'Fashion', 'Real Estate'].map((cat, i) => (
-                <span
-                  key={cat}
-                  className={`px-6 py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all duration-300 ${
-                    i === 0
-                      ? 'bg-orange text-white'
-                      : ''
-                  }`}
-                  style={i !== 0 ? { color: 'var(--muted)', border: '1px solid var(--border)', background: 'var(--glass-light-bg)' } : { color: '#ffffff' }}
-                >
-                  {cat}
-                </span>
-              ))}
-            </div>
-          </ScrollReveal>
-
-          {/* Portfolio Grid — Masonry style */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              {
-                src: '/work/interior-1.png',
-                title: 'Luxury Living Room',
-                category: 'Interior Shoots',
-                client: 'HomeVista Interiors',
-                desc: 'Premium residential interior photography showcasing modern luxury living spaces.',
-                span: 'lg:row-span-2',
-              },
-              {
-                src: '/work/fashion-1.png',
-                title: 'Urban Edge Collection',
-                category: 'Fashion',
-                client: 'Velour Studios',
-                desc: 'High-end editorial campaign with cinematic lighting and bold aesthetics.',
-                span: '',
-              },
-              {
-                src: '/work/realestate-1.png',
-                title: 'Sunset Villa Estate',
-                category: 'Real Estate',
-                client: 'Prestige Properties',
-                desc: 'Golden hour exterior shoot for a luxury villa listing with pool and landscape.',
-                span: '',
-              },
-              {
-                src: '/work/fashion-2.png',
-                title: 'Golden Hour Lookbook',
-                category: 'Fashion',
-                client: 'AuraWear',
-                desc: 'Rooftop fashion lookbook with golden hour lighting and premium color grading.',
-                span: '',
-              },
-              {
-                src: '/work/realestate-2.png',
-                title: 'Skyline Penthouse',
-                category: 'Real Estate',
-                client: 'Luxe Realty Group',
-                desc: 'Interior and exterior photography for a premium penthouse with panoramic city views.',
-                span: '',
-              },
-              {
-                src: '/work/interior-2.png',
-                title: 'Designer Kitchen Suite',
-                category: 'Interior Shoots',
-                client: 'ArchLine Designs',
-                desc: 'Architectural photography of a high-end kitchen with custom cabinetry and marble.',
-                span: '',
-              },
-            ].map((project, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  className={`group relative overflow-hidden rounded-2xl cursor-pointer ${project.span}`}
-                  style={{ border: '1px solid var(--border)' }}
-                >
-                  {/* Image */}
-                  <div className={`overflow-hidden ${project.span === 'lg:row-span-2' ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}>
-                    <motion.img
-                      src={project.src}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                      whileHover={{ scale: 1.08 }}
-                      transition={{ duration: 0.6 }}
-                    />
-                  </div>
-
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-                    {/* Category Tag */}
-                    <motion.span
-                      initial={{ y: 10, opacity: 0 }}
-                      className="inline-block w-fit bg-orange/90 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100 opacity-0 translate-y-2"
-                    >
-                      {project.category}
-                    </motion.span>
-
-                    {/* Title */}
-                    <h3 className="text-xl font-bold font-montserrat text-white mb-1 group-hover:translate-y-0 translate-y-3 transition-transform duration-500 delay-150">
-                      {project.title}
-                    </h3>
-
-                    {/* Client */}
-                    <p className="text-orange/80 text-sm font-medium mb-2 group-hover:translate-y-0 translate-y-3 transition-transform duration-500 delay-200">
-                      {project.client}
-                    </p>
-
-                    {/* Description */}
-                    <p className="text-white/70 text-xs leading-relaxed group-hover:translate-y-0 translate-y-3 transition-transform duration-500 delay-[250ms]">
-                      {project.desc}
-                    </p>
-
-                    {/* View icon */}
-                    <div className="absolute top-4 right-4 w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:opacity-100 opacity-0 transition-all duration-500 delay-100 group-hover:scale-100 scale-75">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M15 3h6v6" />
-                        <path d="M10 14L21 3" />
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                      </svg>
-                    </div>
-                  </div>
-                </motion.div>
-              </ScrollReveal>
-            ))}
-          </div>
-
-          {/* View More CTA */}
-          <ScrollReveal>
-            <div className="text-center mt-14">
-              <Link
-                href="/for-brands"
-                className="inline-flex items-center gap-2 bg-orange hover:bg-[#ff8533] px-8 py-3.5 rounded-full font-semibold transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,107,0,0.3)] hover:scale-105"
-                style={{ color: '#ffffff' }}
+            {/* Headline */}
+            <div style={{ marginBottom: '0.25rem' }}>
+              <motion.h1
+                initial={{ y: 80, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                View All Projects
-                <span>→</span>
-              </Link>
+                <span className="cs-headline">
+                  <span className="cs-headline-white">Something</span>
+                  <span className="cs-headline-orange">Bold</span>
+                  <span className="cs-headline-dim">Is Coming</span>
+                </span>
+              </motion.h1>
             </div>
-          </ScrollReveal>
-        </div>
-      </section>
-      <section className="py-20 relative overflow-hidden">
-        <ParallaxText speed={-0.3} className="text-center">
-          <h2 className="text-6xl md:text-8xl lg:text-[10rem] font-bold font-montserrat uppercase tracking-tight leading-none" style={{ color: 'var(--text-subtle)' }}>
-            Strategy
-          </h2>
-        </ParallaxText>
-        <ParallaxText speed={0.3} className="text-center -mt-8">
-          <h2 className="text-6xl md:text-8xl lg:text-[10rem] font-bold font-montserrat gradient-text uppercase tracking-tight leading-none">
-            Creativity
-          </h2>
-        </ParallaxText>
-        <ParallaxText speed={-0.2} className="text-center -mt-8">
-          <h2 className="text-6xl md:text-8xl lg:text-[10rem] font-bold font-montserrat uppercase tracking-tight leading-none" style={{ color: 'var(--text-subtle)' }}>
-            Results
-          </h2>
-        </ParallaxText>
-      </section>
 
-      {/* ============= PROCESS SECTION ============= */}
-      <section className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-20">
-              <p className="text-orange text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-                Our Process
-              </p>
-              <h2 className="text-4xl md:text-6xl font-bold font-montserrat" style={{ color: 'var(--heading)' }}>
-                How We <span className="gradient-text">Work</span>
-              </h2>
-            </div>
-          </ScrollReveal>
+            {/* Subtext */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="cs-sub"
+            >
+              Creatorstick Media is crafting a next-generation platform for brands, creators, and
+              storytellers. We&apos;re heads-down building — and we&apos;ll be live before you know it.
+            </motion.p>
 
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { step: '01', title: 'Discovery', desc: 'Deep dive into your brand, audience, and goals to build a strategic foundation.' },
-              { step: '02', title: 'Strategy', desc: 'Develop data-driven strategies tailored to your unique objectives and market.' },
-              { step: '03', title: 'Execute', desc: 'Bring ideas to life with precision, creativity, and unwavering quality standards.' },
-              { step: '04', title: 'Optimize', desc: 'Continuously refine and improve based on real performance data and insights.' },
-            ].map((item, i) => (
-              <ScrollReveal key={i} delay={i * 0.15}>
-                <div className="relative">
-                  <div className="text-6xl font-bold font-montserrat text-orange/10 mb-4">
-                    {item.step}
-                  </div>
-                  <h3 className="text-xl font-bold font-montserrat mb-3" style={{ color: 'var(--heading)' }}>{item.title}</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>{item.desc}</p>
-                  {i < 3 && (
-                    <div className="hidden md:block absolute top-8 right-0 w-full h-[1px] bg-gradient-to-r from-orange/20 to-transparent" />
-                  )}
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+            {/* Tags */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="cs-tags"
+            >
+              {['Brand Strategy', 'Creator Marketing', 'Content Production', 'Digital Campaigns', 'Social Media'].map((t) => (
+                <span key={t} className="cs-tag">{t}</span>
+              ))}
+            </motion.div>
 
-      {/* ============= TESTIMONIALS ============= */}
-      <section className="py-32 relative" style={{ borderTop: '1px solid var(--border)' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <p className="text-orange text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-                Client Stories
-              </p>
-              <h2 className="text-4xl md:text-6xl font-bold font-montserrat" style={{ color: 'var(--heading)' }}>
-                What They <span className="gradient-text">Say</span>
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((t, i) => (
-              <ScrollReveal key={i} delay={i * 0.15}>
+            {/* Progress */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+              className="cs-progress-wrap"
+            >
+              <div className="cs-progress-header" style={{ maxWidth: 480, margin: '0 auto 0.75rem' }}>
+                <span className="cs-progress-label">Development Progress</span>
+                <span className="cs-progress-pct">65%</span>
+              </div>
+              <div className="cs-progress-track">
                 <motion.div
-                  whileHover={{ y: -5 }}
-                  className="p-8 rounded-2xl h-full flex flex-col t-card"
-                >
-                  <div className="text-orange text-4xl mb-6">&quot;</div>
-                  <p className="text-base leading-relaxed mb-6 flex-1" style={{ color: 'var(--fg)', opacity: 0.8 }}>
-                    {t.quote}
-                  </p>
-                  <div>
-                    <p className="font-semibold" style={{ color: 'var(--heading)' }}>{t.author}</p>
-                    <p className="text-sm" style={{ color: 'var(--muted)' }}>{t.role}</p>
-                  </div>
-                </motion.div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+                  className="cs-progress-fill"
+                  initial={{ width: 0 }}
+                  animate={{ width: '65%' }}
+                  transition={{ duration: 1.8, delay: 1.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                />
+              </div>
+            </motion.div>
 
-      {/* ============= WHO WE SERVE ============= */}
-      <section className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <p className="text-orange text-sm font-semibold uppercase tracking-[0.2em] mb-4">
-                Who We Serve
-              </p>
-              <h2 className="text-4xl md:text-6xl font-bold font-montserrat" style={{ color: 'var(--heading)' }}>
-                Solutions For <span className="gradient-text">Everyone</span>
-              </h2>
-            </div>
-          </ScrollReveal>
+            {/* Countdown */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.1 }}
+            >
+              <p className="cs-progress-label" style={{ marginBottom: '1.25rem' }}>Launching In</p>
+              <div className="cs-countdown" id="countdown">
+                <CountdownUnit value={days} label="Days" />
+                <span className="cs-countdown-sep">:</span>
+                <CountdownUnit value={hours} label="Hours" />
+                <span className="cs-countdown-sep">:</span>
+                <CountdownUnit value={minutes} label="Minutes" />
+                <span className="cs-countdown-sep">:</span>
+                <CountdownUnit value={seconds} label="Seconds" />
+              </div>
+            </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { title: 'For Brands', desc: 'Strategic partnerships and campaigns that amplify your brand presence.', href: '/for-brands', icon: '◆' },
-              { title: 'For Creators', desc: 'Grow your influence with premium brand collaborations and support.', href: '/for-creators', icon: '▲' },
-              { title: 'Small Business', desc: 'Affordable, impactful marketing solutions tailored to your budget.', href: '/for-small-business', icon: '●' },
-              { title: 'Corporate', desc: 'Enterprise-grade media solutions for large-scale operations.', href: '/corporate', icon: '■' },
-            ].map((item, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <Link href={item.href} className="block group">
+            {/* Email Notify */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.3 }}
+              className="cs-form-wrap"
+            >
+              <label className="cs-form-label" htmlFor="cs-email-input">
+                Get notified on launch
+              </label>
+              <AnimatePresence mode="wait">
+                {submitted ? (
                   <motion.div
-                    whileHover={{ y: -10 }}
-                    className="p-8 rounded-2xl transition-all duration-500 h-full t-card"
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="cs-form-success"
                   >
-                    <span className="text-4xl text-orange/30 group-hover:text-orange transition-colors block mb-6">
-                      {item.icon}
-                    </span>
-                    <h3 className="text-xl font-bold font-montserrat mb-3 group-hover:text-orange transition-colors" style={{ color: 'var(--heading)' }}>
-                      {item.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--muted)' }}>{item.desc}</p>
-                    <span className="text-orange text-sm font-medium flex items-center gap-2">
-                      Explore
-                      <span className="group-hover:translate-x-2 transition-transform">→</span>
-                    </span>
+                    <span className="cs-form-success-icon">✓</span>
+                    You&apos;re on the list! We&apos;ll notify you at launch.
                   </motion.div>
-                </Link>
-              </ScrollReveal>
+                ) : (
+                  <motion.form
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    onSubmit={handleSubmit}
+                    noValidate
+                  >
+                    <div className="cs-form">
+                      <input
+                        id="cs-email-input"
+                        type="email"
+                        className="cs-input"
+                        placeholder="your@email.com"
+                        value={email}
+                        onChange={(e) => { setEmail(e.target.value); setError(''); }}
+                        aria-label="Email address"
+                      />
+                      <button type="submit" className="cs-btn" id="cs-notify-btn">
+                        Notify Me
+                      </button>
+                    </div>
+                    {error && <p className="cs-form-error">{error}</p>}
+                  </motion.form>
+                )}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* Social Links */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1.5 }}
+              className="cs-social"
+              aria-label="Social media links"
+            >
+  {[
+                {
+                  title: 'Instagram',
+                  href: 'https://instagram.com/creatorstick',
+                  icon: (
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                  ),
+                },
+                {
+                  title: 'LinkedIn',
+                  href: 'https://linkedin.com/company/creatorstick',
+                  icon: (
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  ),
+                },
+                {
+                  title: 'X / Twitter',
+                  href: 'https://twitter.com/creatorstick',
+                  icon: (
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  ),
+                },
+                {
+                  title: 'YouTube',
+                  href: 'https://youtube.com/@creatorstick',
+                  icon: (
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                  ),
+                },
+              ].map((s) => (
+                <a
+                  key={s.title}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cs-social-link"
+                  aria-label={s.title}
+                  title={s.title}
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Scroll Hint */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.5 }}
+            className="cs-scroll-hint"
+          >
+            <div className="cs-scroll-mouse">
+              <div className="cs-scroll-dot" />
+            </div>
+            <span className="cs-scroll-text">Scroll</span>
+          </motion.div>
+        </section>
+
+        {/* ── MARQUEE ── */}
+        <div className="cs-marquee-section">
+          <div className="cs-marquee-track">
+            {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
+              <span key={i} className="cs-marquee-item">
+                <span className="cs-marquee-text">{item}</span>
+                <span className="cs-marquee-dot" />
+              </span>
             ))}
           </div>
         </div>
-      </section>
-    </div>
+
+        {/* ── FOOTER ── */}
+        <footer className="cs-footer">
+          <div className="cs-footer-brand">
+            CREATOR<span>STICK</span> MEDIA
+          </div>
+          <div className="cs-footer-copy">
+            © {new Date().getFullYear()} Creatorstick Media Pvt Ltd. All rights reserved.
+          </div>
+        </footer>
+      </div>
+    </>
   );
 }
