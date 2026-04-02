@@ -9,56 +9,48 @@ const serviceCategories = [
     id: 'brand-strategy',
     name: 'Brand Strategy',
     desc: 'Strategic brand positioning and narrative development',
-    price: 'From ₹50,000',
     icon: '◆',
   },
   {
     id: 'influencer-marketing',
     name: 'Influencer Marketing',
     desc: 'Creator partnerships and campaign management',
-    price: 'From ₹30,000',
     icon: '▲',
   },
   {
     id: 'content-production',
     name: 'Content Production',
     desc: 'Video, photo, and creative content creation',
-    price: 'From ₹25,000',
     icon: '●',
   },
   {
     id: 'social-media',
     name: 'Social Media Management',
     desc: 'Full social media management and growth',
-    price: 'From ₹15,000/mo',
     icon: '■',
   },
   {
     id: 'paid-media',
     name: 'Paid Media & Ads',
     desc: 'Strategic ad campaigns across all platforms',
-    price: 'From ₹20,000',
     icon: '◈',
   },
   {
     id: 'corporate-film',
     name: 'Corporate Film & Video',
     desc: 'Professional corporate video production',
-    price: 'From ₹1,00,000',
     icon: '✦',
   },
   {
     id: 'web-development',
     name: 'Web Design & Development',
     desc: 'Custom website design and development',
-    price: 'From ₹75,000',
     icon: '⬡',
   },
   {
     id: 'consulting',
     name: 'Strategic Consulting',
     desc: 'Expert advisory and consulting sessions',
-    price: 'From ₹10,000/hr',
     icon: '◇',
   },
 ];
@@ -307,8 +299,7 @@ export default function BookService() {
                         </div>
                       </div>
                       <h3 className="font-bold font-montserrat mb-1">{service.name}</h3>
-                      <p className="text-gray text-xs mb-2">{service.desc}</p>
-                      <span className="text-orange text-xs font-semibold">{service.price}</span>
+                      <p className="text-gray text-xs">{service.desc}</p>
                     </motion.button>
                   ))}
                 </div>

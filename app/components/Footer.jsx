@@ -6,24 +6,27 @@ import ScrollReveal from './ScrollReveal';
 
 const footerLinks = {
   Services: [
-    { label: 'Brand Strategy', href: '/for-brands' },
-    { label: 'Creator Marketing', href: '/for-creators' },
-    { label: 'Small Business', href: '/for-small-business' },
-    { label: 'Corporate Solutions', href: '/corporate' },
-    { label: 'Content Production', href: '/for-brands' },
+    { label: 'Brand Strategy',      href: '/services/brand-strategy' },
+    { label: 'Influencer Marketing',href: '/services/influencer-marketing' },
+    { label: 'Content Production',  href: '/services/content-production' },
+    { label: 'Social Media',        href: '/services/social-media' },
+    { label: 'Paid Media & Ads',    href: '/services/paid-media' },
+    { label: 'Video Production',    href: '/services/video-production' },
+    { label: 'Web Development',     href: '/services/web-development' },
+    { label: 'Consulting',          href: '/services/consulting' },
   ],
   Company: [
-    { label: 'About Us', href: '/' },
-    { label: 'Careers', href: '/careers' },
-    { label: 'Contact', href: '/book' },
-    { label: 'Blog', href: '/' },
-    { label: 'Press', href: '/' },
+    { label: 'About Us',  href: '/about' },
+    { label: 'Careers',   href: '/careers' },
+    { label: 'Blog',      href: '/blog' },
+    { label: 'Press',     href: '/press' },
+    { label: 'Contact',   href: '/book' },
   ],
   Legal: [
-    { label: 'Privacy Policy', href: '/' },
-    { label: 'Terms of Service', href: '/' },
-    { label: 'Cookie Policy', href: '/' },
-    { label: 'Disclaimer', href: '/' },
+    { label: 'Privacy Policy',  href: '/privacy' },
+    { label: 'Terms of Service',href: '/terms' },
+    { label: 'Cookie Policy',   href: '/cookies' },
+    { label: 'Disclaimer',      href: '/disclaimer' },
   ],
 };
 
@@ -52,7 +55,7 @@ const socialLinks = [
   },
   {
     label: 'Twitter',
-    href: '#',
+    href: 'https://x.com/creatorstick',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4l11.733 16h4.267l-11.733 -16h-4.267z" />
@@ -62,7 +65,7 @@ const socialLinks = [
   },
   {
     label: 'YouTube',
-    href: '#',
+    href: 'https://www.youtube.com/@CreatorstickMedia',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.43z" />
@@ -198,10 +201,10 @@ export default function Footer() {
             © {new Date().getFullYear()} Creatorstick Media Private Limited. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <Link href="/" className="text-sm transition-colors hover:text-orange" style={{ color: 'var(--text-muted)' }}>
+            <Link href="/privacy" className="text-sm transition-colors hover:text-orange" style={{ color: 'var(--text-muted)' }}>
               Privacy
             </Link>
-            <Link href="/" className="text-sm transition-colors hover:text-orange" style={{ color: 'var(--text-muted)' }}>
+            <Link href="/terms" className="text-sm transition-colors hover:text-orange" style={{ color: 'var(--text-muted)' }}>
               Terms
             </Link>
             <span className="text-sm" style={{ color: 'var(--text-muted)' }}>

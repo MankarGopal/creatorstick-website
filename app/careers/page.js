@@ -57,14 +57,14 @@ const openings = [
 ];
 
 const perks = [
-  { icon: '🏠', title: 'Flexible Work', desc: 'Hybrid and remote options available' },
-  { icon: '📚', title: 'Learning Budget', desc: '₹50K annual learning & development' },
-  { icon: '🏥', title: 'Health Insurance', desc: 'Comprehensive coverage for you & family' },
-  { icon: '🎮', title: 'Fun Culture', desc: 'Team events, game nights, offsite trips' },
-  { icon: '📈', title: 'Growth Path', desc: 'Clear career progression & mentorship' },
-  { icon: '💰', title: 'Competitive Pay', desc: 'Above-market compensation & bonuses' },
-  { icon: '🌴', title: 'Generous PTO', desc: '24 days paid leave + holidays' },
-  { icon: '🍕', title: 'Meal Allowance', desc: 'Daily meal credits for in-office days' },
+  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>, title: 'Flexible Work', desc: 'Hybrid and remote options available' },
+  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>, title: 'Learning Budget', desc: '₹50K annual learning & development' },
+  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>, title: 'Health Insurance', desc: 'Comprehensive coverage for you & family' },
+  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>, title: 'Fun Culture', desc: 'Team events, game nights, offsite trips' },
+  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>, title: 'Growth Path', desc: 'Clear career progression & mentorship' },
+  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>, title: 'Competitive Pay', desc: 'Above-market compensation & bonuses' },
+  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>, title: 'Generous PTO', desc: '24 days paid leave + holidays' },
+  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>, title: 'Meal Allowance', desc: 'Daily meal credits for in-office days' },
 ];
 
 const values = [
@@ -125,7 +125,7 @@ export default function Careers() {
         />
 
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-6 w-full">
-          <div className="max-w-4xl">
+          <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

@@ -25,6 +25,10 @@
   --footer-bg: #0d0d0d;
   --scrollbar-track: #111111;
   --card-glow: rgba(255, 107, 0, 0.1);
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --section-alt-bg: rgba(255, 255, 255, 0.01);
+  --mobile-menu-bg: rgba(17, 17, 17, 0.98);
+  --logo-text: #ffffff;
   color-scheme: dark;
 }
 
@@ -51,6 +55,10 @@
   --footer-bg: #f0f0f0;
   --scrollbar-track: #fafafa;
   --card-glow: rgba(255, 107, 0, 0.08);
+  --card-bg: rgba(0, 0, 0, 0.02);
+  --section-alt-bg: rgba(0, 0, 0, 0.015);
+  --mobile-menu-bg: rgba(250, 250, 250, 0.98);
+  --logo-text: #111111;
   color-scheme: light;
 }
 

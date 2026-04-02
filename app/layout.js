@@ -1,12 +1,16 @@
 import './globals.css';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import ScrollProgress from './components/ScrollProgress';
+import ThemeProvider from './components/ThemeProvider';
 
 export const metadata = {
-  title: 'Creatorstick Media — Coming Soon',
-  description: 'Creatorstick Media is a next-generation media agency in the making. Something bold is launching soon. Stay tuned.',
-  keywords: 'media agency, coming soon, creatorstick, brand strategy, creator marketing',
+  title: 'Creatorstick Media | Premium Media Agency',
+  description: 'Creatorstick Media Private Limited — A premium media agency specializing in brand strategy, creator marketing, content production, and corporate media solutions.',
+  keywords: 'media agency, brand strategy, creator marketing, content production, influencer marketing, digital marketing',
   openGraph: {
-    title: 'Creatorstick Media — Coming Soon',
-    description: 'Something bold is launching soon. Stay tuned.',
+    title: 'Creatorstick Media | Premium Media Agency',
+    description: 'Transform your brand with Creatorstick Media — Premium media solutions that create lasting impact.',
     type: 'website',
   },
 };
@@ -15,7 +19,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <body className="font-montserrat antialiased">
-        {children}
+        <ThemeProvider>
+          <ScrollProgress />
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
