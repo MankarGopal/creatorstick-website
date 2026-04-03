@@ -7,64 +7,26 @@ import ParallaxText from '../components/ParallaxText';
 
 const openings = [
   {
-    title: 'Senior Brand Strategist',
-    department: 'Strategy',
-    location: 'Mumbai / Remote',
-    type: 'Full-time',
-    desc: 'Lead brand strategy development for top-tier clients. You\'ll shape brand narratives and drive strategic direction across multi-channel campaigns.',
-    requirements: ['5+ years brand strategy experience', 'Strong presentation skills', 'Agency experience preferred', 'Portfolio of brand case studies'],
+    title: 'PR (Public Relations)',
+    department: 'Communications',
+    type: 'Internship / Part-time',
+    desc: 'Help build CreatorStick Media\'s public image and manage PR activities. You\'ll draft press releases, manage media relations, and coordinate brand communications across channels.',
+    requirements: ['Strong written communication skills', 'Understanding of media landscape', 'Social media savvy', 'Self-motivated and proactive'],
   },
   {
-    title: 'Content Producer',
-    department: 'Production',
-    location: 'Mumbai',
-    type: 'Full-time',
-    desc: 'Own content production from ideation to delivery. You\'ll work with creators, brands, and our internal team to produce compelling content.',
-    requirements: ['3+ years content production', 'Video & photo production experience', 'Project management skills', 'Knowledge of social platforms'],
+    title: 'Client Reach Out',
+    department: 'Business Development',
+    type: 'Internship / Part-time',
+    desc: 'Identify and connect with potential clients for CreatorStick Media. You\'ll research brands, draft outreach messages, and help build a pipeline of brand partnerships and projects.',
+    requirements: ['Strong communication skills', 'Research and prospecting ability', 'Persuasive writing', 'Goal-oriented mindset'],
   },
   {
-    title: 'Social Media Manager',
-    department: 'Marketing',
-    location: 'Mumbai / Hybrid',
-    type: 'Full-time',
-    desc: 'Manage social media for multiple brand accounts. Create content calendars, grow audiences, and report on performance.',
-    requirements: ['2+ years social media management', 'Copywriting skills', 'Analytics proficiency', 'Trend awareness'],
+    title: 'Business Development Intern',
+    department: 'Business Development',
+    type: 'Internship',
+    desc: 'Support the growth of CreatorStick Media by assisting in business strategy, market research, partnership development, and client acquisition. A great opportunity to learn brand building from ground up.',
+    requirements: ['Interest in digital marketing & media', 'Basic understanding of business strategy', 'Strong communication', 'Team player with initiative'],
   },
-  {
-    title: 'Motion Graphics Designer',
-    department: 'Creative',
-    location: 'Remote',
-    type: 'Full-time',
-    desc: 'Create stunning motion graphics and animations for social content, brand campaigns, and corporate videos.',
-    requirements: ['After Effects expertise', 'Cinema 4D is a plus', 'Strong design portfolio', 'Understanding of social platforms'],
-  },
-  {
-    title: 'Business Development Manager',
-    department: 'Sales',
-    location: 'Mumbai / Delhi',
-    type: 'Full-time',
-    desc: 'Drive new business acquisition and manage client relationships. You\'ll identify opportunities and close deals with major brands.',
-    requirements: ['3+ years B2B sales', 'Media/advertising industry experience', 'Strong network', 'Excellent communication'],
-  },
-  {
-    title: 'Data Analyst (Marketing)',
-    department: 'Analytics',
-    location: 'Remote',
-    type: 'Full-time',
-    desc: 'Analyze campaign performance, build dashboards, and provide actionable insights to optimize marketing strategies.',
-    requirements: ['SQL & Python proficiency', 'Experience with analytics tools', 'Strong visualization skills', 'Marketing data experience'],
-  },
-];
-
-const perks = [
-  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>, title: 'Flexible Work', desc: 'Hybrid and remote options available' },
-  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>, title: 'Learning Budget', desc: '₹50K annual learning & development' },
-  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>, title: 'Health Insurance', desc: 'Comprehensive coverage for you & family' },
-  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>, title: 'Fun Culture', desc: 'Team events, game nights, offsite trips' },
-  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>, title: 'Growth Path', desc: 'Clear career progression & mentorship' },
-  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>, title: 'Competitive Pay', desc: 'Above-market compensation & bonuses' },
-  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>, title: 'Generous PTO', desc: '24 days paid leave + holidays' },
-  { icon: <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>, title: 'Meal Allowance', desc: 'Daily meal credits for in-office days' },
 ];
 
 const values = [
@@ -154,7 +116,7 @@ export default function Careers() {
               className="text-gray text-xl max-w-2xl mb-10 leading-relaxed"
             >
               Get in on the ground floor. Join a passionate, fast-moving team of creators 
-              and strategists building the next big media agency from scratch.
+              and strategists building the next big media agency from scratch. Help us drive content growth and brand building for amazing clients.
             </motion.p>
 
             <motion.div
@@ -189,35 +151,6 @@ export default function Careers() {
                   <h3 className="text-xl font-bold font-montserrat mb-3">{v.title}</h3>
                   <p className="text-gray text-sm leading-relaxed">{v.desc}</p>
                 </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Perks */}
-      <section className="py-32">
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <p className="text-orange text-sm font-semibold uppercase tracking-[0.2em] mb-4">Benefits</p>
-              <h2 className="text-4xl md:text-6xl font-bold font-montserrat">
-                Why <span className="gradient-text">Join Us</span>
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {perks.map((perk, i) => (
-              <ScrollReveal key={i} delay={i * 0.05}>
-                <motion.div
-                  whileHover={{ y: -5, borderColor: 'rgba(255,107,0,0.2)' }}
-                  className="p-6 rounded-2xl border border-white/5 bg-white/[0.02] text-center h-full"
-                >
-                  <div className="text-3xl mb-3">{perk.icon}</div>
-                  <h3 className="font-bold font-montserrat mb-1 text-sm">{perk.title}</h3>
-                  <p className="text-gray text-xs">{perk.desc}</p>
-                </motion.div>
               </ScrollReveal>
             ))}
           </div>
@@ -259,8 +192,6 @@ export default function Careers() {
                       <h3 className="text-lg font-bold font-montserrat">{job.title}</h3>
                       <div className="flex flex-wrap gap-3 mt-2">
                         <span className="text-xs text-orange">{job.department}</span>
-                        <span className="text-xs text-gray">•</span>
-                        <span className="text-xs text-gray">{job.location}</span>
                         <span className="text-xs text-gray">•</span>
                         <span className="text-xs text-gray">{job.type}</span>
                       </div>
@@ -384,8 +315,7 @@ export default function Careers() {
                     <option value="0-1" className="bg-dark">0-1 years</option>
                     <option value="1-3" className="bg-dark">1-3 years</option>
                     <option value="3-5" className="bg-dark">3-5 years</option>
-                    <option value="5-8" className="bg-dark">5-8 years</option>
-                    <option value="8+" className="bg-dark">8+ years</option>
+                    <option value="5+" className="bg-dark">5+ years</option>
                   </select>
                 </div>
                 <div>
@@ -413,13 +343,13 @@ export default function Careers() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray mb-2">Cover Letter / Why Creatorstick?</label>
+                <label className="block text-sm font-medium text-gray mb-2">Cover Letter / Why CreatorStick?</label>
                 <textarea
                   rows={5}
                   value={formData.coverLetter}
                   onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3.5 text-white placeholder-gray/50 resize-none"
-                  placeholder="Tell us why you want to join Creatorstick and what makes you the perfect fit..."
+                  placeholder="Tell us why you want to join CreatorStick Media and what makes you the perfect fit..."
                 />
               </div>
 

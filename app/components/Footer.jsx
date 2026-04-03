@@ -12,14 +12,14 @@ const footerLinks = {
     { label: 'Social Media',        href: '/services/social-media' },
     { label: 'Paid Media & Ads',    href: '/services/paid-media' },
     { label: 'Video Production',    href: '/services/video-production' },
-    { label: 'Web Development',     href: '/services/web-development' },
+    { label: 'Digital Product Dev', href: '/services/web-development' },
     { label: 'Consulting',          href: '/services/consulting' },
   ],
   Company: [
     { label: 'About Us',  href: '/about' },
     { label: 'Careers',   href: '/careers' },
     { label: 'Blog',      href: '/blog' },
-    { label: 'Press',     href: '/press' },
+    { label: 'Services',  href: '/for-brands#services' },
     { label: 'Contact',   href: '/book' },
   ],
   Legal: [
@@ -44,7 +44,7 @@ const socialLinks = [
   },
   {
     label: 'LinkedIn',
-    href: '#',
+    href: 'https://www.linkedin.com/company/creatorstick',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -54,7 +54,7 @@ const socialLinks = [
     ),
   },
   {
-    label: 'Twitter',
+    label: 'X.com',
     href: 'https://x.com/creatorstick',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -81,20 +81,44 @@ export default function Footer() {
       {/* CTA Section */}
       <div className="max-w-7xl mx-auto px-6 pt-24 pb-16">
         <ScrollReveal>
-          <div className="text-center mb-20">
+          <div className="text-center mb-12">
             <h2 className="text-4xl md:text-6xl font-bold font-montserrat mb-6" style={{ color: 'var(--foreground)' }}>
               Ready to <span className="gradient-text">Elevate</span> Your Brand?
             </h2>
             <p className="text-lg max-w-2xl mx-auto mb-8" style={{ color: 'var(--text-muted)' }}>
-              Let&apos;s create something extraordinary together. Book a consultation and discover what&apos;s possible.
+              Let&apos;s create something extraordinary together. Book a consultation or reach out directly.
             </p>
-            <Link
-              href="/book"
-              className="inline-block bg-orange hover:bg-[#ff8533] px-10 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,107,0,0.4)] hover:scale-105"
-              style={{ color: '#ffffff' }}
-            >
-              Start Your Project
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/book"
+                className="inline-block bg-orange hover:bg-[#ff8533] px-10 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,107,0,0.4)] hover:scale-105"
+                style={{ color: '#ffffff' }}
+              >
+                Start Your Project
+              </Link>
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://www.instagram.com/creatorstick/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 hover:scale-105"
+                  style={{ color: 'var(--heading)', border: '1px solid var(--border-hover)', background: 'var(--glass-light-bg)' }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg>
+                  DM on Instagram
+                </a>
+                <a
+                  href="https://wa.me/917774817043?text=Hi%20CreatorStick%2C%20I%27d%20like%20to%20discuss%20a%20project."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 hover:scale-105"
+                  style={{ color: 'var(--heading)', border: '1px solid var(--border-hover)', background: 'var(--glass-light-bg)' }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>
+                  WhatsApp
+                </a>
+              </div>
+            </div>
           </div>
         </ScrollReveal>
 
@@ -109,7 +133,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>
-              A fresh, bold media agency crafting digital impact through creative storytelling and smart strategy. Based in India, building globally.
+              CreatorStick Media — A fresh, bold media agency crafting digital impact through creative storytelling, content growth, and smart brand building strategy. Based in India, building globally.
             </p>
             {/* Social Icons */}
             <div className="flex gap-3">
@@ -167,7 +191,7 @@ export default function Footer() {
               Stay Updated
             </h4>
             <p className="text-sm mb-4" style={{ color: 'var(--text-muted)' }}>
-              Get the latest insights on media, marketing, and creative strategy.
+              Get the latest insights on media, marketing, and creative strategy from CreatorStick Media.
             </p>
             <div className="flex flex-col gap-3">
               <input

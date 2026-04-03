@@ -29,7 +29,7 @@ const services = [
   { href: '/services/social-media',        label: 'Social Media',          desc: 'Full management & growth',   iconType: 'share'     },
   { href: '/services/paid-media',          label: 'Paid Media & Ads',      desc: 'Meta, Google & more',        iconType: 'chart'     },
   { href: '/services/video-production',    label: 'Video Production',      desc: 'Films & brand videos',       iconType: 'play'      },
-  { href: '/services/web-development',     label: 'Web Development',       desc: 'Sites & landing pages',      iconType: 'browser'   },
+  { href: '/services/web-development',     label: 'Digital Product Dev',desc: 'Sites & landing pages',      iconType: 'browser'   },
   { href: '/services/consulting',          label: 'Consulting',            desc: 'Strategy & advisory',        iconType: 'lightbulb' },
 ];
 
@@ -167,7 +167,20 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass py-3' : 'bg-transparent py-5'}`}
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-700"
+        style={scrolled ? {
+          backdropFilter: 'blur(28px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+          background: 'var(--glass-bg)',
+          borderBottom: '1px solid var(--glass-border)',
+          boxShadow: '0 4px 30px rgba(0,0,0,0.12)',
+          padding: '10px 0',
+        } : {
+          backdropFilter: 'none',
+          background: 'transparent',
+          borderBottom: '1px solid transparent',
+          padding: '20px 0',
+        }}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
@@ -322,6 +335,19 @@ export default function Navbar() {
               >
                 Get in Touch
               </Link>
+            </motion.div>
+            {/* Social quick links in mobile menu */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }} className="flex gap-4 mt-2">
+              {[
+                { href: 'https://www.instagram.com/creatorstick/', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> },
+                { href: 'https://x.com/creatorstick', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 4l11.733 16h4.267l-11.733-16z"/><path d="M4 20l6.768-6.768m2.46-2.46l6.772-6.772"/></svg> },
+                { href: 'https://www.linkedin.com/company/creatorstick', icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg> },
+              ].map((s, i) => (
+                <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:bg-orange hover:text-white"
+                  style={{ background: 'var(--glass-light-bg)', border: '1px solid var(--border)', color: 'var(--muted)' }}
+                >{s.icon}</a>
+              ))}
             </motion.div>
           </motion.div>
         )}

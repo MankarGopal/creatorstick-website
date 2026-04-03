@@ -206,7 +206,7 @@ export default function ForCreators() {
                 {/* Animated follower count */}
                 <div className="rounded-xl py-3 px-4 mb-4" style={{ background: 'rgba(255,107,0,0.08)' }}>
                   <div className="text-2xl font-bold gradient-text font-montserrat">
-                    <AnimatedCounter target={125} suffix="K" />
+                    <AnimatedCounter target={0} suffix="K" />
                   </div>
                   <div className="text-xs" style={{ color: 'var(--muted)' }}>Followers</div>
                 </div>
@@ -227,6 +227,9 @@ export default function ForCreators() {
               <PlatformBadge name="LinkedIn" color="#0077b5" delay={1.2} className="top-12 left-0"
                 icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>}
               />
+              <PlatformBadge name="X.com" color="#000000" delay={1.35} className="bottom-16 left-4"
+                icon={<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M4 4l11.733 16h4.267l-11.733 -16h-4.267z" /><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" /></svg>}
+              />
 
 
             </div>
@@ -239,9 +242,9 @@ export default function ForCreators() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { number: 50, suffix: '+', label: 'Creators Onboard' },
-              { number: 15, suffix: '+', label: 'Brand Partners' },
-              { number: 2, suffix: 'M+', label: 'Combined Reach' },
+              { number: 0, suffix: '+', label: 'Creators Onboard' },
+              { number: 0, suffix: '+', label: 'Brand Partners' },
+              { number: 0, suffix: '+', label: 'Combined Reach' },
               { number: 100, suffix: '%', label: 'Passion Driven' },
             ].map((stat, i) => (
               <ScrollReveal key={i} delay={i * 0.1}>
@@ -347,52 +350,47 @@ export default function ForCreators() {
             </div>
           </ScrollReveal>
 
-          <div className="relative">
-            {/* Vertical spine (desktop) */}
-            <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2" style={{ background: 'linear-gradient(180deg, transparent, rgba(255,107,0,0.3) 20%, rgba(255,107,0,0.3) 80%, transparent)' }} />
-            
-            <div className="space-y-8 lg:space-y-0">
-              {creatorTiers.map((t, i) => (
-                <ScrollReveal key={i} delay={i * 0.1}>
-                  <div className={`lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center ${i % 2 === 1 ? '' : ''}`}>
-                    {/* Tier card — alternates sides on desktop */}
-                    <div className={`lg:col-start-${i % 2 === 0 ? '1' : '2'} lg:row-start-1`}>
-                      <motion.div
-                        whileHover={{ scale: 1.02 }}
-                        className={`p-8 rounded-2xl relative ${t.popular ? 'ring-2 ring-orange' : ''}`}
-                        style={{ border: t.popular ? '1px solid rgba(255,107,0,0.4)' : '1px solid var(--border)', background: t.popular ? 'linear-gradient(135deg, rgba(255,107,0,0.08) 0%, var(--card-bg) 100%)' : 'var(--card-bg)' }}
-                      >
-                        {t.popular && (
-                          <span className="absolute -top-3 left-6 text-xs bg-orange text-white px-4 py-1 rounded-full font-semibold">Most Popular</span>
-                        )}
-                        <div className="flex items-start gap-4 mb-4">
-                          <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold font-montserrat flex-shrink-0" style={{ background: 'rgba(255,107,0,0.15)', color: '#FF6B00' }}>
-                            {t.badge}
-                          </div>
-                          <div>
-                            <h3 className="text-2xl font-bold font-montserrat" style={{ color: 'var(--heading)' }}>{t.tier}</h3>
-                            <p className="text-orange text-sm font-medium">{t.followers} followers</p>
-                          </div>
-                        </div>
-                        <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--muted)' }}>{t.desc}</p>
-                        <ul className="space-y-2">
-                          {t.perks.map((p) => (
-                            <li key={p} className="text-sm flex items-center gap-2.5" style={{ color: 'var(--muted)' }}>
-                              <span className="text-orange text-xs flex-shrink-0">✦</span> {p}
-                            </li>
-                          ))}
-                        </ul>
-                      </motion.div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {creatorTiers.map((t, i) => (
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  className={`p-7 rounded-2xl relative h-full ${t.popular ? 'ring-2 ring-orange' : ''}`}
+                  style={{
+                    border: t.popular ? '1px solid rgba(255,107,0,0.4)' : '1px solid var(--border)',
+                    background: t.popular
+                      ? 'linear-gradient(135deg, rgba(255,107,0,0.08) 0%, var(--card-bg) 100%)'
+                      : 'var(--card-bg)',
+                  }}
+                >
+                  {t.popular && (
+                    <span className="absolute -top-3 left-4 text-xs bg-orange text-white px-3 py-1 rounded-full font-semibold">
+                      Most Popular
+                    </span>
+                  )}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div
+                      className="w-11 h-11 rounded-full flex items-center justify-center text-base font-bold font-montserrat flex-shrink-0"
+                      style={{ background: 'rgba(255,107,0,0.15)', color: '#FF6B00' }}
+                    >
+                      {t.badge}
                     </div>
-
-                    {/* Center dot on spine (desktop) */}
-                    <div className="hidden lg:flex items-center justify-center" style={{ gridColumn: i % 2 === 0 ? '2' : '1', gridRow: '1' }}>
-                      <motion.div whileHover={{ scale: 1.5 }} className="w-4 h-4 rounded-full border-2 border-orange" style={{ background: 'var(--bg)' }} />
+                    <div>
+                      <h3 className="text-xl font-bold font-montserrat" style={{ color: 'var(--heading)' }}>{t.tier}</h3>
+                      <p className="text-orange text-xs font-medium">{t.followers} followers</p>
                     </div>
                   </div>
-                </ScrollReveal>
-              ))}
-            </div>
+                  <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--muted)' }}>{t.desc}</p>
+                  <ul className="space-y-2">
+                    {t.perks.map((p) => (
+                      <li key={p} className="text-sm flex items-center gap-2" style={{ color: 'var(--muted)' }}>
+                        <span className="text-orange text-xs flex-shrink-0">✦</span> {p}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>

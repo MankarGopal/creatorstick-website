@@ -267,10 +267,10 @@ export default function ForBrands() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { number: 15, suffix: '+', label: 'Brands Served' },
-              { number: 25, suffix: '+', label: 'Campaigns Launched' },
-              { number: 5, suffix: 'M+', label: 'Total Impressions' },
-              { number: 3, suffix: 'x', label: 'Avg. ROI' },
+              { number: 0, suffix: '+', label: 'Brands Served' },
+              { number: 0, suffix: '+', label: 'Campaigns Launched' },
+              { number: 0, suffix: '+', label: 'Total Impressions' },
+              { number: 0, suffix: 'x', label: 'Avg. ROI' },
             ].map((stat, i) => (
               <ScrollReveal key={i} delay={i * 0.1}>
                 <div className="text-center">
@@ -368,69 +368,6 @@ export default function ForBrands() {
         </ParallaxText>
       </section>
 
-      {/* ===== CASE STUDIES — SPOTLIGHT ===== */}
-      <section className="py-32" style={{ borderTop: '1px solid var(--border)' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <p className="text-orange text-sm font-semibold uppercase tracking-[0.2em] mb-4">Results</p>
-              <h2 className="text-4xl md:text-6xl font-bold font-montserrat" style={{ color: 'var(--heading)' }}>
-                Case <span className="gradient-text">Studies</span>
-              </h2>
-            </div>
-          </ScrollReveal>
-
-          <div className="space-y-6">
-            {caseStudies.map((study, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <motion.div
-                  whileHover={{ scale: 1.01 }}
-                  className="rounded-3xl p-8 md:p-10 grid md:grid-cols-3 gap-8 items-center"
-                  style={{ background: 'var(--card-bg)', border: '1px solid var(--border)' }}
-                >
-                  <div className="md:col-span-2">
-                    <span className="text-xs text-orange uppercase tracking-widest font-semibold">{study.category}</span>
-                    <h3 className="text-3xl font-bold font-montserrat mt-2 mb-3" style={{ color: 'var(--heading)' }}>{study.brand}</h3>
-                    <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>{study.result}</p>
-                  </div>
-                  <div className="flex flex-col items-center md:items-end gap-2">
-                    <div className="text-5xl md:text-6xl font-bold gradient-text font-montserrat leading-none">{study.metric}</div>
-                    <div className="text-sm uppercase tracking-wider" style={{ color: 'var(--muted)' }}>{study.metricLabel}</div>
-                    <span className="mt-2 text-xs font-semibold px-3 py-1 rounded-full" style={{ background: 'rgba(255,107,0,0.1)', color: '#FF6B00' }}>
-                      {study.growth} Growth
-                    </span>
-                  </div>
-                </motion.div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== TRUST BAR ===== */}
-      <section className="py-20" style={{ borderTop: '1px solid var(--border)' }}>
-        <div className="max-w-7xl mx-auto px-6">
-          <ScrollReveal>
-            <p className="text-center text-sm uppercase tracking-[0.2em] mb-12" style={{ color: 'var(--muted)' }}>
-              Trusted by brands across industries
-            </p>
-          </ScrollReveal>
-          <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
-            {['Fashion', 'Technology', 'Sustainability', 'F&B', 'Real Estate', 'Health'].map((industry, i) => (
-              <ScrollReveal key={industry} delay={i * 0.08}>
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className="flex items-center gap-3 px-6 py-3 rounded-full"
-                  style={{ border: '1px solid var(--border)', color: 'var(--muted)' }}
-                >
-                  <span className="text-orange text-xs">◆</span>
-                  <span className="font-semibold text-sm uppercase tracking-wider">{industry}</span>
-                </motion.div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ===== CTA ===== */}
       <section className="py-32">
