@@ -241,7 +241,7 @@ export default function Navbar() {
 
             {/* CTA: "Get in Touch" */}
             <Link
-              href="/book"
+              href="/contact"
               className="hidden sm:block bg-orange hover:bg-[#ff8533] text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,107,0,0.4)]"
               style={{ color: '#ffffff' }}
             >
@@ -328,7 +328,7 @@ export default function Navbar() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="flex items-center gap-4 mt-4">
               <ThemeToggle />
               <Link
-                href="/book"
+                href="/contact"
                 className="bg-orange text-white px-8 py-3 rounded-full text-lg font-semibold"
                 style={{ color: '#ffffff' }}
                 onClick={() => setIsOpen(false)}

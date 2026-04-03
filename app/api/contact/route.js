@@ -6,43 +6,39 @@ export async function POST(request) {
   try {
     const data = await request.json();
 
-    const entry = await pushEntry(KEYS.CAREERS, {
+    const entry = await pushEntry(KEYS.CONTACTS, {
       name: data.name || '',
       email: data.email || '',
       phone: data.phone || '',
-      position: data.position || '',
-      experience: data.experience || '',
-      portfolio: data.portfolio || '',
-      resume: data.resume || '',
-      cover_letter: data.coverLetter || '',
+      subject: data.subject || '',
+      inquiry_type: data.inquiryType || '',
+      message: data.message || '',
     });
 
     // Mirror to Google Sheets (non-blocking, optional)
-    appendToSheet('Career Applications', {
+    appendToSheet('Contact Messages', {
       'Submitted At': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
       'Name': data.name || '',
       'Email': data.email || '',
       'Phone': data.phone || '',
-      'Position Applied': data.position || '',
-      'Experience': data.experience || '',
-      'Portfolio / LinkedIn': data.portfolio || '',
-      'Resume Link': data.resume || '',
-      'Cover Letter': data.coverLetter || '',
+      'Subject': data.subject || '',
+      'Inquiry Type': (data.inquiryType || '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+      'Message': data.message || '',
     });
 
     return NextResponse.json({ success: true, id: entry.id }, { status: 201 });
   } catch (error) {
-    console.error('Careers POST error:', error);
+    console.error('Contact POST error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
 export async function GET() {
   try {
-    const applications = await getEntries(KEYS.CAREERS);
-    return NextResponse.json({ success: true, data: applications });
+    const messages = await getEntries(KEYS.CONTACTS);
+    return NextResponse.json({ success: true, data: messages });
   } catch (error) {
-    console.error('Careers GET error:', error);
+    console.error('Contact GET error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
